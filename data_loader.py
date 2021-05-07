@@ -20,7 +20,7 @@ class VideoData(Dataset):
 
     def __len__(self):
         return len(self.video_list)
-
+`
     def __getitem__(self, index):
         if self.preprocessed:
             image_path = self.video_list[index]
