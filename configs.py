@@ -5,11 +5,14 @@ from pathlib import Path
 import pprint
 
 project_dir = Path(__file__).resolve().parent
-dataset_dir = Path('/data1/jysung710/tmp_sum/360video/').resolve()
-video_list = ['360airballoon', '360parade', '360rowing', '360scuba', '360wedding']
-save_dir = Path('/data1/jmcho/SUM_GAN/')
-score_dir = Path('/data1/common_datasets/tmp_sum/360video/results/SUM-GAN/')
+dataset_dir = Path('/scratch.gw2145/data/SumMe/').resolve()
+# video_list = ['360airballoon', '360parade', '360rowing', '360scuba', '360wedding']
+video_list = ["videos"]
 
+# save_dir = Path('/data1/jmcho/SUM_GAN/')
+# score_dir = Path('/data1/common_datasets/tmp_sum/360video/results/SUM-GAN/')
+save_dir = Path('/scratch/gw2145/experiments/avs/saves')
+score_dir = Path('/scratch/gw2145/experiments/avs/scores')
 
 def str2bool(v):
     """string to boolean"""
