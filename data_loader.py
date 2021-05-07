@@ -11,7 +11,7 @@ import numpy as np
 
 
 class VideoData(Dataset):
-    def __init__(self, root, preprocessed=True, transform=resnet_transform, with_name=False):
+    def __init__(self, root, preprocessed=False, transform=resnet_transform, with_name=False):
         self.root = root
         self.preprocessed = preprocessed
         self.transform = transform
