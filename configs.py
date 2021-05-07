@@ -5,7 +5,7 @@ from pathlib import Path
 import pprint
 
 project_dir = Path(__file__).resolve().parent
-dataset_dir = Path('/scratch.gw2145/data/SumMe/').resolve()
+dataset_dir = Path('/scratch/gw2145/data/SumMe/').resolve()
 # video_list = ['360airballoon', '360parade', '360rowing', '360scuba', '360wedding']
 video_list = ["demo"]
 
