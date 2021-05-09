@@ -8,7 +8,22 @@ from pathlib import Path
 from feature_extraction import resnet_transform
 import h5py
 import numpy as np
+import os
 
+class VideoImageData(Dataset):
+    def __init__(self, image_dir, transform=resnet_transform):
+        self.image_dir = image_dir
+        self.transform = resnet_transform
+        self.image_files = os.listdir(self.image_dir)
+    def __len__(self):
+        return len(self.image_files)
+
+    def __getitem__(self, index):
+        image_file = self.image_files[index]
+        image_path = os.path.join(self.image_dir, image_file)
+        img = default_loader(image_path)
+        image_tensor = self.transform(img)
+        return image_tensor
 
 class VideoData(Dataset):
     def __init__(self, root, preprocessed=False, transform=resnet_transform, with_name=False):

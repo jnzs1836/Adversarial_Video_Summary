@@ -102,22 +102,16 @@ class Solver(object):
             for batch_i, image_features in enumerate(tqdm(
                     self.train_loader, desc='Batch', ncols=80, leave=False)):
                 image_features = image_features[0]
-                print(image_features.size())
                 image_features = image_features.view(-1, 3, 224, 224)
-                image_features = image_features[:32, :, :,:]
+                image_features = image_features[:32, :, :, :]
                 image_features = image_features.cuda()
                 nvmlInit()
                 h = nvmlDeviceGetHandleByIndex(0)
                 info = nvmlDeviceGetMemoryInfo(h)
                 torch.cuda.empty_cache()
-                print(f'total    : {info.total}')
-                print(f'free     : {info.free}')
-                print(f'used     : {info.used}')
 
-                print(image_features.size())
                 image_features = self.resnet(image_features)
                 image_features = image_features[1]
-                print(image_features.size())
                 if image_features.size(1) > 10000:
                     continue
                 
