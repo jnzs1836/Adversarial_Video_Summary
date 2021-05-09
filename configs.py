@@ -5,7 +5,7 @@ from pathlib import Path
 import pprint
 
 project_dir = Path(__file__).resolve().parent
-dataset_dir = Path('/scratch/gw2145/data/SumMe/demo').resolve()
+dataset_dir = Path('/scratch/gw2145/data/SumMe/').resolve()
 # video_list = ['360airballoon', '360parade', '360rowing', '360scuba', '360wedding']
 video_list = ["demo"]
 
@@ -37,7 +37,7 @@ class Config(object):
             self.video_root_dir = dataset_dir.joinpath('resnet101_feature', video_type, self.mode)
         else:
             self.video_root_dir = dataset_dir.joinpath('video_subshot', video_type, 'test')
-        self.video_root_dir = dataset_dir.joinpath("train")
+        self.video_root_dir = dataset_dir.joinpath("images")
         self.save_dir = save_dir.joinpath(video_type)
         self.log_dir = self.save_dir
         self.ckpt_path = self.save_dir.joinpath(f'epoch-{self.epoch}.pkl')

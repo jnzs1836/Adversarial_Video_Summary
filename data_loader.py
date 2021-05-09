@@ -17,13 +17,14 @@ class VideoData(Dataset):
         self.transform = transform
         self.with_name = with_name
         self.video_list = list(self.root.iterdir())
-
+        print(self.video_list)
     def __len__(self):
         return len(self.video_list)
 
     def __getitem__(self, index):
         if self.preprocessed:
             image_path = self.video_list[index]
+            print("image", image_path)
             with h5py.File(image_path, 'r') as f:
                 if self.with_name:
                     return torch.Tensor(np.array(f['pool5'])), image_path.name[:-5]
