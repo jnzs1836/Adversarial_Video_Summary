@@ -33,11 +33,12 @@ class VideoData(Dataset):
 
         else:
             images = []
+            print("here")
             for img_path in Path(self.video_list[index]).glob('*.jpg'):
                 img = default_loader(img_path)
                 img_tensor = self.transform(img)
                 images.append(img_tensor)
-
+            print(images[0].size())
             return torch.stack(images), img_path.parent.name[4:]
 
 

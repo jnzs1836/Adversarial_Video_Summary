@@ -99,7 +99,7 @@ class Solver(object):
             c_loss_history = []
             for batch_i, image_features in enumerate(tqdm(
                     self.train_loader, desc='Batch', ncols=80, leave=False)):
-
+                image_features = image_features[0]
                 if image_features.size(1) > 10000:
                     continue
 
