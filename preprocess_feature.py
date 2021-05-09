@@ -16,14 +16,16 @@ def main(root = "", save_path = "./out.h5"):
         batch_size = 32
         loader = DataLoader(VideoImageData(image_dir_path), batch_size=batch_size)
         for i, batch in enumerate(tqdm(loader, desc="process: ")):
-
+            batch = batch.cuda()
+            features = model(batch)
+            features = features[1].cpu()
             for j in range(batch_size):
-                features = model(batch)
-                image_t = batch[j, : , :, :]
+                print(features.size())
+                image_t = features[j, : ]
                 print(image_t.size())
                 image_t = torch.squeeze(image_t)
                 print(image_t.size())
-                image_data = image_t.numpy()
+                image_data = image_t.detach().numpy()
                 count = i * batch_size + j
                 break
                 dset = image_group.create_dataset(str(count), data=image_data)
