@@ -23,7 +23,7 @@ class VideoImageData(Dataset):
         image_path = os.path.join(self.image_dir, image_file)
         img = default_loader(image_path)
         image_tensor = self.transform(img)
-        return image_tensor
+        return image_tensor, image_file
 
 class VideoData(Dataset):
     def __init__(self, root, preprocessed=False, transform=resnet_transform, with_name=False):
