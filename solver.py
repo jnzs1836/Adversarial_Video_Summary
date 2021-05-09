@@ -8,9 +8,10 @@ import numpy as np
 import json
 from tqdm import tqdm, trange
 
+from pynvml import *
 from layers import Summarizer, Discriminator  # , apply_weight_norm
 from utils import TensorboardWriter
-# from feature_extraction import ResNetFeature
+from feature_extraction import ResNetFeature
 
 
 class Solver(object):
@@ -19,6 +20,7 @@ class Solver(object):
         self.config = config
         self.train_loader = train_loader
         self.test_loader = test_loader
+        self.resnet = ResNetFeature().cuda()
 
     def build(self):
 
@@ -100,9 +102,25 @@ class Solver(object):
             for batch_i, image_features in enumerate(tqdm(
                     self.train_loader, desc='Batch', ncols=80, leave=False)):
                 image_features = image_features[0]
+                print(image_features.size())
+                image_features = image_features.view(-1, 3, 224, 224)
+                image_features = image_features[:32, :, :,:]
+                image_features = image_features.cuda()
+                nvmlInit()
+                h = nvmlDeviceGetHandleByIndex(0)
+                info = nvmlDeviceGetMemoryInfo(h)
+                torch.cuda.empty_cache()
+                print(f'total    : {info.total}')
+                print(f'free     : {info.free}')
+                print(f'used     : {info.used}')
+
+                print(image_features.size())
+                image_features = self.resnet(image_features)
+                image_features = image_features[1]
+                print(image_features.size())
                 if image_features.size(1) > 10000:
                     continue
-
+                
                 # [batch_size=1, seq_len, 2048]
                 # [seq_len, 2048]
                 image_features = image_features.view(-1, self.config.input_size)
