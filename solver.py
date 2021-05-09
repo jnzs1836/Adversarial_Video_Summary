@@ -145,14 +145,14 @@ class Solver(object):
                 h_uniform, uniform_prob = self.discriminator(uniform_features)
 
                 tqdm.write(
-                    f'original_p: {original_prob.data[0]:.3f}, fake_p: {fake_prob.data[0]:.3f}, uniform_p: {uniform_prob.data[0]:.3f}')
+                    f'original_p: {original_prob.item():.3f}, fake_p: {fake_prob.item():.3f}, uniform_p: {uniform_prob.item():.3f}')
 
                 reconstruction_loss = self.reconstruction_loss(h_origin, h_fake)
                 prior_loss = self.prior_loss(h_mu, h_log_variance)
                 sparsity_loss = self.sparsity_loss(scores)
 
                 tqdm.write(
-                    f'recon loss {reconstruction_loss.data[0]:.3f}, prior loss: {prior_loss.data[0]:.3f}, sparsity loss: {sparsity_loss.data[0]:.3f}')
+                    f'recon loss {reconstruction_loss.item():.3f}, prior loss: {prior_loss.item():.3f}, sparsity loss: {sparsity_loss.data.item():.3f}')
 
                 s_e_loss = reconstruction_loss + prior_loss + sparsity_loss
 
@@ -181,13 +181,13 @@ class Solver(object):
                 h_uniform, uniform_prob = self.discriminator(uniform_features)
 
                 tqdm.write(
-                    f'original_p: {original_prob.data[0]:.3f}, fake_p: {fake_prob.data[0]:.3f}, uniform_p: {uniform_prob.data[0]:.3f}')
+                    f'original_p: {original_prob.item():.3f}, fake_p: {fake_prob.item():.3f}, uniform_p: {uniform_prob.item():.3f}')
 
                 reconstruction_loss = self.reconstruction_loss(h_origin, h_fake)
                 gan_loss = self.gan_loss(original_prob, fake_prob, uniform_prob)
 
                 tqdm.write(
-                    f'recon loss {reconstruction_loss.data[0]:.3f}, gan loss: {gan_loss.data[0]:.3f}')
+                    f'recon loss {reconstruction_loss.item():.3f}, gan loss: {gan_loss.item():.3f}')
 
                 d_loss = reconstruction_loss + gan_loss
 
@@ -200,7 +200,7 @@ class Solver(object):
                 d_loss_history.append(d_loss.data)
 
                 #---- Train cLSTM ----#
-                if batch_i > self.config.discriminator_slow_start:
+                if batch_i > self.config.discriminator_slow_start or True:
                     if self.config.verbose:
                         tqdm.write('Training cLSTM...')
                     # [seq_len, 1, hidden_size]
@@ -215,12 +215,12 @@ class Solver(object):
                     h_fake, fake_prob = self.discriminator(generated_features)
                     h_uniform, uniform_prob = self.discriminator(uniform_features)
                     tqdm.write(
-                        f'original_p: {original_prob.data[0]:.3f}, fake_p: {fake_prob.data[0]:.3f}, uniform_p: {uniform_prob.data[0]:.3f}')
+                        f'original_p: {original_prob.item():.3f}, fake_p: {fake_prob.item():.3f}, uniform_p: {uniform_prob.item():.3f}')
 
                     # Maximization
                     c_loss = -1 * self.gan_loss(original_prob, fake_prob, uniform_prob)
 
-                    tqdm.write(f'gan loss: {gan_loss.data[0]:.3f}')
+                    tqdm.write(f'gan loss: {gan_loss.item():.3f}')
 
                     self.c_optimizer.zero_grad()
                     c_loss.backward()
@@ -290,7 +290,7 @@ class Solver(object):
             # [seq_len]
             scores = self.summarizer.s_lstm(video_feature).squeeze(1)
 
-            scores = np.array(scores.data).tolist()
+            scores = np.array(scores.cpu().data).tolist()
 
             out_dict[video_name] = scores
 
