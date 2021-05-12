@@ -102,8 +102,8 @@ class Solver(object):
             for batch_i, image_features in enumerate(tqdm(
                     self.train_loader, desc='Batch', ncols=80, leave=False)):
                 image_features = image_features[0]
-                image_features = image_features.view(-1, 3, 224, 224)
-                image_features = image_features[:32, :, :, :]
+                # image_features = image_features.view(-1, 3, 224, 224)
+                # image_features = image_features[:32, :, :, :]
                 image_features = image_features.cuda()
                 nvmlInit()
                 h = nvmlDeviceGetHandleByIndex(0)
