@@ -26,25 +26,35 @@ class VideoImageData(Dataset):
         return image_tensor, image_file
 
 class VideoData(Dataset):
-    def __init__(self, root, preprocessed=False, transform=resnet_transform, with_name=False):
+    def __init__(self, root, preprocessed=True, transform=resnet_transform, with_name=False):
         self.root = root
         self.preprocessed = preprocessed
         self.transform = transform
         self.with_name = with_name
-        self.video_list = list(self.root.iterdir())
+        hf = h5py.File(root, 'r')
+        self.video_features = hf['pool5']
+        # self.video_list = list(self.root.iterdir())
+        self.video_list = self.video_features.keys()
         print(self.video_list)
     def __len__(self):
         return len(self.video_list)
 
     def __getitem__(self, index):
         if self.preprocessed:
-            image_path = self.video_list[index]
-            print("image", image_path)
-            with h5py.File(image_path, 'r') as f:
-                if self.with_name:
-                    return torch.Tensor(np.array(f['pool5'])), image_path.name[:-5]
-                else:
-                    return torch.Tensor(np.array(f['pool5']))
+            video_group = self.video_features[self.video_list[index]]
+            pass
+            imgs = []
+            for image_name in video_group.keys():
+                image_data = video_group[image_name]
+                imgs.append(torch.Tensor(image_data))
+            return torch.stack(imgs), self.video_list[index]
+            # image_path = self.video_list[index]
+            # print("image", image_path)
+            # with h5py.File(image_path, 'r') as f:
+            #     if self.with_name:
+            #         return torch.Tensor(np.array(f['pool5'])), image_path.name[:-5]
+            #     else:
+            #         return torch.Tensor(np.array(f['pool5']))
 
         else:
             images = []
