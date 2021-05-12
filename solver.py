@@ -20,7 +20,7 @@ class Solver(object):
         self.config = config
         self.train_loader = train_loader
         self.test_loader = test_loader
-        self.resnet = ResNetFeature().cuda()
+        # self.resnet = ResNetFeature().cuda()
 
     def build(self):
 
@@ -110,10 +110,10 @@ class Solver(object):
                 info = nvmlDeviceGetMemoryInfo(h)
                 torch.cuda.empty_cache()
 
-                image_features = self.resnet(image_features)
-                image_features = image_features[1]
-                if image_features.size(1) > 10000:
-                    continue
+                # image_features = self.resnet(image_features)
+                # image_features = image_features[1]
+                # if image_features.size(1) > 10000:
+                #     continue
                 
                 # [batch_size=1, seq_len, 2048]
                 # [seq_len, 2048]
