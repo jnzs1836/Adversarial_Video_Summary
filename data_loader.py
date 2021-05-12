@@ -34,7 +34,7 @@ class VideoData(Dataset):
         hf = h5py.File(root, 'r')
         self.video_features = hf['pool5']
         # self.video_list = list(self.root.iterdir())
-        self.video_list = self.video_features.keys()
+        self.video_list = list(self.video_features.keys())
         print(self.video_list)
     def __len__(self):
         return len(self.video_list)
