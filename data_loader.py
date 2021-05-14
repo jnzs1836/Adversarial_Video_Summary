@@ -41,13 +41,15 @@ class VideoData(Dataset):
 
     def __getitem__(self, index):
         if self.preprocessed:
-            video_group = self.video_features[self.video_list[index]]
-            pass
-            imgs = []
-            for image_name in video_group.keys():
-                image_data = video_group[image_name]
-                imgs.append(torch.Tensor(image_data))
-            return torch.stack(imgs), self.video_list[index]
+            video_data = self.video_features[self.video_list[index]]
+            video_data = torch.Tensor(video_data).cuda()
+            print(video_data.size())
+            return video_data, self.video_list[index]
+            # imgs = []
+            # for image_name in video_group.keys():
+            #     image_data = video_group[image_name]
+            #     imgs.append(torch.Tensor(image_data))
+            # return torch.stack(imgs), self.video_list[index]
             # image_path = self.video_list[index]
             # print("image", image_path)
             # with h5py.File(image_path, 'r') as f:
