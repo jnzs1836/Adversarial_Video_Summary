@@ -22,7 +22,7 @@ def main(root = "", save_path = "./out_v2.h5"):
             batch_images = batch_images.cuda()
             features = model(batch_images)
             all_features.append(features[1].detach())
-        all_features = torch.stack(all_features).cpu()
+        all_features = torch.cat(all_features, dim=0).cpu()
         all_features = all_features.detach().numpy()
         print(all_features.shape)
         images_group.create_dataset(image_dir, data=all_features)
